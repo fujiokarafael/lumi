@@ -37,7 +37,7 @@ export default function DependenteProfile() {
   const nivelAbaAtiva = usePermission(abaAtiva)
 
   const { itens: registrosSaude } = useRegistrosSaude(id)
-  const { itens: documentosSaude } = useDocumentosSaude(id)
+  const { itens: documentosSaude, adicionar: adicionarDocumentoSaude } = useDocumentosSaude(id)
   const { itens: consultas } = useConsultas(id)
   const { itens: medicamentos } = useMedicamentos(id)
   const { itens: vacinas } = useVacinas(id)
@@ -99,7 +99,7 @@ export default function DependenteProfile() {
                 </li>
               ))}
             </ul>
-            <button className="botao-mock" disabled>+ Anexar receita ou exame</button>
+            <AnexarDocumentoSaude onAdicionar={adicionarDocumentoSaude} />
           </RoleGate>
         )}
 
@@ -254,6 +254,36 @@ function Marcos({ dependenteId }) {
         <input type="text" placeholder="Título" value={form.titulo} onChange={atualizarCampo('titulo')} />
         <input type="date" value={form.data} onChange={atualizarCampo('data')} />
         <input type="text" placeholder="Descrição" value={form.descricao} onChange={atualizarCampo('descricao')} />
+        <button type="submit">Adicionar</button>
+      </form>
+    </>
+  )
+}
+
+
+function AnexarDocumentoSaude({ onAdicionar }) {
+  const [form, setForm] = useState({ tipo: 'receita', descricao: '', dataUpload: '' })
+
+  function atualizarCampo(campo) {
+    return (e) => setForm((atual) => ({ ...atual, [campo]: e.target.value }))
+  }
+
+  async function adicionarItem(e) {
+    e.preventDefault()
+    await onAdicionar(form)
+    setForm({ tipo: 'receita', descricao: '', dataUpload: '' })
+  }
+
+  return (
+    <>
+
+      <form className="form-novo-item" onSubmit={adicionarItem}>
+        <select value={form.tipo} onChange={atualizarCampo('tipo')}>
+          <option value="receita">Receita</option>
+          <option value="exame">Exame</option>
+        </select>
+        <input type="text" placeholder="Descrição" value={form.descricao} onChange={atualizarCampo('descricao')} />
+        <input type="date" value={form.dataUpload} onChange={atualizarCampo('dataUpload')} />
         <button type="submit">Adicionar</button>
       </form>
     </>
