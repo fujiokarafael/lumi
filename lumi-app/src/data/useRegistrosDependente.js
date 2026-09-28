@@ -8,6 +8,7 @@ import {
   vacinas,
   lembretes,
   itensCompra,
+  marcos,
 } from './mockData'
 
 export const useDocumentos = criarUseColecao({
@@ -131,3 +132,22 @@ export const useItensCompra = criarUseColecao({
   paraApp: (row) => ({ id: row.id, dependenteId: row.dependente_id, nome: row.nome, comprado: row.comprado }),
   paraBanco: (d) => ({ nome: d.nome, comprado: d.comprado }),
 })
+
+export const useMarcos= criarUseColecao(
+  {
+    tabela: 'marcos',
+    dadosMock: marcos,
+    paraApp: (row)=>({
+      id: row.id,
+      dependenteId: row.dependente_id,
+      titulo: row.titulo,
+      data:row.data,
+      descricao:row.descricao,
+    }),
+    paraBanco: (d)=> ({
+      titulo: d.titulo,
+      data:d.data,
+      descricao:d.descricao ?? null,
+    })
+  }
+)

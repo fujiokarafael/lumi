@@ -11,6 +11,8 @@ export const PERMISSIONS = {
   listaCompras: { responsavel: 'full', cuidador: 'full', convidado: 'none' },
   escolarConvenio: { responsavel: 'full', cuidador: 'read', convidado: 'none' },
   configuracoes: { responsavel: 'full', cuidador: 'none', convidado: 'none' },
+  marcos: { responsavel: 'full', cuidador: 'partial', convidado: 'none' },
+
 }
 
 export function getPermission(papel, categoria) {

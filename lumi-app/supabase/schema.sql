@@ -271,4 +271,18 @@ create policy "itens_compra: acesso da propria familia" on itens_compra
 
 alter publication supabase_realtime add table
   documentos, registros_saude, consultas, documentos_saude,
-  medicamentos, vacinas, lembretes, itens_compra;
+  medicamentos, vacinas, lembretes, itens_compra, marcos;
+
+create table if not exists marcos(
+  id uuid primary key default gen_random_uuid(),
+  dependente_id uuid not null references dependentes (id) on delete cascade,
+  titulo text not null,
+  data date,
+  descricao text,
+  criado_em timestamptz not null default now()
+);
+
+alter table marcos enable row level security;
+
+create policy "marcos: acesso da propria familia" on marcos
+  for all using (pertence_a_familia(dependente_id)) with check (pertence_a_familia(dependente_id));

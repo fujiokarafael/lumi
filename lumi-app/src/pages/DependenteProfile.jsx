@@ -12,6 +12,7 @@ import {
   useVacinas,
   useLembretes,
   useItensCompra,
+  useMarcos,
 } from '../data/useRegistrosDependente'
 
 const ABAS = [
@@ -22,6 +23,7 @@ const ABAS = [
   { id: 'lembretes', titulo: 'Lembretes' },
   { id: 'listaCompras', titulo: 'Lista de compras' },
   { id: 'escolarConvenio', titulo: 'Documentos' },
+  { id: 'marcos', titulo: 'Marcos'},
 ]
 
 const TIPO_DOCUMENTO_SAUDE = { receita: 'Receita', exame: 'Exame' }
@@ -173,6 +175,11 @@ export default function DependenteProfile() {
             </ul>
           </RoleGate>
         )}
+        {abaAtiva === 'marcos' && (
+          <RoleGate categoria="marcos">
+            <Marcos dependenteId={id} />
+            </RoleGate>
+        )}      
       </div>
     </div>
   )
@@ -213,6 +220,40 @@ function ListaCompras({ dependenteId }) {
           value={novoItem}
           onChange={(e) => setNovoItem(e.target.value)}
         />
+        <button type="submit">Adicionar</button>
+      </form>
+    </>
+  )
+}
+
+function Marcos({ dependenteId }) {
+  const { itens, adicionar } = useMarcos(dependenteId)
+  const [form, setForm] = useState({ titulo: '', data: '', descricao: '' })
+
+  function atualizarCampo(campo) {
+    return (e) => setForm((atual) => ({ ...atual, [campo]: e.target.value }))
+  }
+
+  async function adicionarItem(e) {
+    e.preventDefault()
+    await adicionar(form)
+    setForm({ titulo: '', data: '', descricao: '' })
+  }
+
+  return (
+    <>
+      <ul className="registro-lista">
+        {itens.map((item) => (
+          <li key={item.id}>
+            <strong>{item.titulo}</strong>
+            <span className="registro-meta">{item.data} · {item.descricao}</span>
+          </li>
+        ))}
+      </ul>
+      <form className="form-novo-item" onSubmit={adicionarItem}>
+        <input type="text" placeholder="Título" value={form.titulo} onChange={atualizarCampo('titulo')} />
+        <input type="date" value={form.data} onChange={atualizarCampo('data')} />
+        <input type="text" placeholder="Descrição" value={form.descricao} onChange={atualizarCampo('descricao')} />
         <button type="submit">Adicionar</button>
       </form>
     </>

@@ -57,3 +57,7 @@ export const itensCompra = [
   { id: 'ic2', dependenteId: 'd1', nome: 'Fraldas tamanho P', comprado: true },
   { id: 'ic3', dependenteId: 'd1', nome: 'Termômetro digital', comprado: false },
 ]
+
+export const marcos= [
+  {id: 'mc1', dependenteId: 'd1', titulo: 'Primeiro sorriso', data:'2026-04-10', descricao: 'Sorriu pela primeira vez durante o banho.'}
+]
